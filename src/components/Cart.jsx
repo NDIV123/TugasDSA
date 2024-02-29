@@ -1,13 +1,21 @@
+import { useState } from "react";
 import { hitungDiskon, rupiah } from "../libs/ToRupiah";
+import { useEffect } from "react";
 
 const Cart = ({ report }) => {
-  let discArr = hitungDiskon(report)
-  const originalPrice = report?.reduce((a, b) => a + b.harga * b.jumlah, 0);
-  const totalDiskon = discArr.reduce((a, b) => a + b, 0)
-  
-  const total = originalPrice - totalDiskon;
-  
+  const [discArr, setDiscArr] = useState([])
+  const [originalPrice, setOriginalPrice] = useState(0)
+  const [totalDiskon, setTotalDiskon] = useState(0)
+  const [total, setTotal] = useState(0)
 
+useEffect(()=> {
+  setDiscArr(hitungDiskon(report))
+  setOriginalPrice(report?.reduce((a, b) => a + b.harga * b.jumlah, 0))
+  setTotalDiskon(discArr.reduce((a, b) => a + b, 0))
+  setTotal(originalPrice-totalDiskon)
+
+},[discArr])
+  
   return (
     <div className="">
       <div className="overflow-x-auto">
