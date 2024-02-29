@@ -64,8 +64,7 @@ function App() {
         jumlah: 5,
       });
       return setReport(listReport);
-    }
-    else {
+    } else {
       listReport.push({
         namaBarang: nama,
         kodeBarang: kode,

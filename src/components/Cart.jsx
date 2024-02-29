@@ -1,9 +1,12 @@
-import { rupiah } from "../libs/ToRupiah";
+import { hitungDiskon, rupiah } from "../libs/ToRupiah";
 
 const Cart = ({ report }) => {
+  let discArr = hitungDiskon(report)
   const originalPrice = report?.reduce((a, b) => a + b.harga * b.jumlah, 0);
-  const diskon = report.reduce((a, b) => a + b.harga * b.jumlah * 0.1, 0);
-  const total = originalPrice - diskon;
+  const totalDiskon = discArr.reduce((a, b) => a + b, 0)
+  
+  const total = originalPrice - totalDiskon;
+  
 
   return (
     <div className="">
@@ -27,7 +30,7 @@ const Cart = ({ report }) => {
                   <td>{rupiah(item.harga)}</td>
                   <td>{item.jumlah}</td>
                   <td>
-                    {rupiah(item.jumlah > 10 ? item.harga * item.jumlah * 0.1 : 0)}
+                    {rupiah(item.jumlah>10 ? item.harga * item.jumlah * 0.1 : 0)}
                   </td>
                 </tr>
               );
