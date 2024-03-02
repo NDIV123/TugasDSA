@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 import Cart from "./components/Cart";
-import { rupiah } from "./libs/ToRupiah";
+import { rupiah } from "./libs/Funct-libs";
+
 
 function App() {
   const listBarang = [
@@ -157,7 +158,7 @@ function App() {
           </table>
         </div>
       </div>
-      <Cart report={report} />
+      <Cart report={report} setReport={setReport}/>
     </>
   );
 }
