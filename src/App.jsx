@@ -1,12 +1,15 @@
 import { useState } from "react";
 import "./App.css";
 import Cart from "./components/Cart";
-import { rupiah } from "./libs/Funct-libs";
-
+import { hitungDiskon, rupiah } from "./libs/Funct-libs";
 
 function App() {
   const listBarang = [
-    { namaBarang: "Sapu", kodeBarang: 1, harga: 10000 },
+    {
+      namaBarang: "Sapu",
+      kodeBarang: 1,
+      harga: 10000,
+    },
     {
       namaBarang: "Gunting",
       kodeBarang: 2,
@@ -20,6 +23,7 @@ function App() {
   ];
 
   const [report, setReport] = useState([]);
+  const [discArr, setDiscArr] = useState([]);
 
   const handleAddProduct = (kode, nama, harga, operasi) => {
     let listReport = [...report];
@@ -27,11 +31,13 @@ function App() {
       const found = listReport.find((item) => item.kodeBarang === kode);
       if (operasi === "tambah5") {
         found.jumlah += 5;
-        return setReport(listReport);
+        setReport(listReport);
+        return setDiscArr(hitungDiskon(report));
       }
       if (operasi === "kurang5" && found.jumlah > 5) {
         found.jumlah -= 5;
-        return setReport(listReport);
+        setReport(listReport);
+        return setDiscArr(hitungDiskon(report));
       }
       if (operasi === "kurang5" && found.jumlah - 5 <= 0) {
         return;
@@ -41,11 +47,13 @@ function App() {
       }
       if (operasi === "tambah") {
         found.jumlah += 1;
-        return setReport(listReport);
+        setReport(listReport);
+        return setDiscArr(hitungDiskon(report));
       }
       if (operasi === "kurang" && found.jumlah > 0) {
         found.jumlah -= 1;
-        return setReport(listReport);
+        setReport(listReport);
+        return setDiscArr(hitungDiskon(report));
       }
     }
     if (
@@ -64,7 +72,8 @@ function App() {
         harga: harga,
         jumlah: 5,
       });
-      return setReport(listReport);
+      setReport(listReport);
+      return setDiscArr(hitungDiskon(report));
     } else {
       listReport.push({
         namaBarang: nama,
@@ -73,6 +82,7 @@ function App() {
         jumlah: 1,
       });
       setReport(listReport);
+      return setDiscArr(hitungDiskon(report));
     }
   };
 
@@ -158,7 +168,7 @@ function App() {
           </table>
         </div>
       </div>
-      <Cart report={report} setReport={setReport}/>
+      <Cart report={report} setReport={setReport} discArr={discArr} />
     </>
   );
 }

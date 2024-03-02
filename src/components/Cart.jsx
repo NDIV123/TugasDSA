@@ -1,26 +1,14 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
-import { hitungDiskon, rupiah } from "../libs/Funct-libs";
 
-const Cart = ({ report, setReport}) => {
-  const [discArr, setDiscArr] = useState([]);
-  const [originalPrice, setOriginalPrice] = useState(0);
-  const [totalDiskon, setTotalDiskon] = useState(0);
-  const [total, setTotal] = useState(0);
+import { rupiah } from "../libs/Funct-libs";
 
-  useEffect(() => {
-    setDiscArr(hitungDiskon(report));
-    setOriginalPrice(report?.reduce((a, b) => a + b.harga * b.jumlah, 0));
-    setTotalDiskon(discArr.reduce((a, b) => a + b, 0));
-    setTotal(originalPrice - totalDiskon);
-  }, [discArr]);
-
+const Cart = ({ report, setReport, discArr }) => {
   const handleDelete = (kode) => {
-    let arr = [...report]
+    let arr = [...report];
     const filtered = arr.filter((item) => item.kodeBarang !== kode);
-    console.log(filtered)
+    console.log(filtered);
     setReport(arr.filter((item) => item.kodeBarang !== kode));
-  }
+  };
 
   return (
     <div className="">
@@ -50,14 +38,25 @@ const Cart = ({ report, setReport}) => {
                     )}
                   </td>
                   <td>
-                    <button className="btn btn-error btn-xs" onClick={() => handleDelete(item.kodeBarang)}>X</button>
+                    <button
+                      className="btn btn-error btn-xs"
+                      onClick={() => handleDelete(item.kodeBarang)}
+                    >
+                      X
+                    </button>
                   </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
-        <p className="mt-10">Total Belanjaan Anda : {rupiah(total)}</p>
+        <p className="mt-10">
+          Total Belanjaan Anda :{" "}
+          {rupiah(
+            report?.reduce((a, b) => a + b.harga * b.jumlah, 0) -
+              discArr.reduce((a, b) => a + b, 0)
+          )}
+        </p>
       </div>
     </div>
   );
