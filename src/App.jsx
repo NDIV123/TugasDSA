@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Cart from "./components/Cart";
 import { hitungDiskon, rupiah } from "./libs/Funct-libs";
+import { useEffect } from "react";
 
 function App() {
   const listBarang = [
@@ -97,6 +98,10 @@ function App() {
     let arr = [...report];
     setReport(arr.filter((item) => item.kodeBarang !== kode));
   };
+
+  useEffect(() => {
+    setDiscArr(hitungDiskon(report))
+  },[report])
 
   return (
     <>

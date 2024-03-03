@@ -12,7 +12,8 @@ const Cart = ({ report, discArr, handleDelete }) => {
               <th>Kode Barang</th>
               <th>Nama Barang</th>
               <th>Harga Barang</th>
-              <th>Jumlah</th>
+              <th>Jumlah Item</th>
+              <th>Harga Total</th>
               <th>Diskon</th>
               <th></th>
             </tr>
@@ -25,6 +26,7 @@ const Cart = ({ report, discArr, handleDelete }) => {
                   <td>{item.namaBarang}</td>
                   <td>{rupiah(item.harga)}</td>
                   <td>{item.jumlah}</td>
+                  <td>{rupiah(item.harga * item.jumlah)}</td>
                   <td>
                     {rupiah(
                       item.jumlah > 10 ? item.harga * item.jumlah * 0.1 : 0
