@@ -25,53 +25,11 @@ function App() {
   const [report, setReport] = useState([]);
   const [discArr, setDiscArr] = useState([]);
 
-  const handleAddProduct = (kode, nama, harga, operasi) => {
+  const handleAddOneProduct = (kode, nama, harga) => {
     let listReport = [...report];
     if (listReport.find((item) => item.kodeBarang === kode)) {
       const found = listReport.find((item) => item.kodeBarang === kode);
-      if (operasi === "tambah5") {
-        found.jumlah += 5;
-        setReport(listReport);
-        return setDiscArr(hitungDiskon(report));
-      }
-      if (operasi === "kurang5" && found.jumlah > 5) {
-        found.jumlah -= 5;
-        setReport(listReport);
-        return setDiscArr(hitungDiskon(report));
-      }
-      if (operasi === "kurang5" && found.jumlah - 5 <= 0) {
-        return;
-      }
-      if (operasi === "kurang" && found.jumlah - 1 < 0) {
-        return;
-      }
-      if (operasi === "tambah") {
-        found.jumlah += 1;
-        setReport(listReport);
-        return setDiscArr(hitungDiskon(report));
-      }
-      if (operasi === "kurang" && found.jumlah > 0) {
-        found.jumlah -= 1;
-        setReport(listReport);
-        return setDiscArr(hitungDiskon(report));
-      }
-    }
-    if (
-      (operasi == "kurang" || operasi == "kurang5") &&
-      !listReport.find((item) => item.kodeBarang === kode)
-    ) {
-      return null;
-    }
-    if (
-      !listReport.find((item) => item.kodeBarang === kode) &&
-      operasi == "tambah5"
-    ) {
-      listReport.push({
-        namaBarang: nama,
-        kodeBarang: kode,
-        harga: harga,
-        jumlah: 5,
-      });
+      found.jumlah += 1;
       setReport(listReport);
       return setDiscArr(hitungDiskon(report));
     } else {
@@ -84,6 +42,60 @@ function App() {
       setReport(listReport);
       return setDiscArr(hitungDiskon(report));
     }
+  };
+
+  const handleAddFiveProduct = (kode, nama, harga) => {
+    let listReport = [...report];
+    if (listReport.find((item) => item.kodeBarang === kode)) {
+      const found = listReport.find((item) => item.kodeBarang === kode);
+      found.jumlah += 5;
+      setReport(listReport);
+      return setDiscArr(hitungDiskon(report));
+    } else {
+      listReport.push({
+        namaBarang: nama,
+        kodeBarang: kode,
+        harga: harga,
+        jumlah: 5,
+      });
+      setReport(listReport);
+      return setDiscArr(hitungDiskon(report));
+    }
+  };
+
+  const handleRemoveOneProduct = (kode) => {
+    let listReport = [...report];
+    const found = listReport.find((item) => item.kodeBarang === kode);
+    if (
+      listReport.find((item) => item.kodeBarang === kode) &&
+      found.jumlah > 1
+    ) {
+      found.jumlah -= 1;
+      setReport(listReport);
+      return setDiscArr(hitungDiskon(report));
+    } else {
+      return handleDelete(kode);
+    }
+  };
+
+  const handleRemoveFiveProduct = (kode) => {
+    let listReport = [...report];
+    const found = listReport.find((item) => item.kodeBarang === kode);
+    if (
+      listReport.find((item) => item.kodeBarang === kode) &&
+      found.jumlah > 5
+    ) {
+      found.jumlah -= 5;
+      setReport(listReport);
+      return setDiscArr(hitungDiskon(report));
+    } else {
+      return handleDelete(kode);
+    }
+  };
+
+  const handleDelete = (kode) => {
+    let arr = [...report];
+    setReport(arr.filter((item) => item.kodeBarang !== kode));
   };
 
   return (
@@ -109,38 +121,23 @@ function App() {
                     <td>{rupiah(item.harga)}</td>
                     <td className="flex gap-4 justify-center">
                       <button
-                        onClick={() =>
-                          handleAddProduct(
-                            item.kodeBarang,
-                            item.namaBarang,
-                            item.harga,
-                            "kurang5"
-                          )
-                        }
+                        onClick={() => handleRemoveFiveProduct(item.kodeBarang)}
                         className="btn btn-primary py-2 w-12"
                       >
                         -5
                       </button>
                       <button
-                        onClick={() =>
-                          handleAddProduct(
-                            item.kodeBarang,
-                            item.namaBarang,
-                            item.harga,
-                            "kurang"
-                          )
-                        }
+                        onClick={() => handleRemoveOneProduct(item.kodeBarang)}
                         className="btn btn-primary w-12"
                       >
                         -
                       </button>
                       <button
                         onClick={() =>
-                          handleAddProduct(
+                          handleAddOneProduct(
                             item.kodeBarang,
                             item.namaBarang,
-                            item.harga,
-                            "tambah"
+                            item.harga
                           )
                         }
                         className="btn btn-primary w-12"
@@ -149,11 +146,10 @@ function App() {
                       </button>
                       <button
                         onClick={() =>
-                          handleAddProduct(
+                          handleAddFiveProduct(
                             item.kodeBarang,
                             item.namaBarang,
-                            item.harga,
-                            "tambah5"
+                            item.harga
                           )
                         }
                         className="btn btn-primary py-2 w-12"
@@ -168,7 +164,7 @@ function App() {
           </table>
         </div>
       </div>
-      <Cart report={report} setReport={setReport} discArr={discArr} />
+      <Cart report={report} discArr={discArr} handleDelete={handleDelete} />
     </>
   );
 }

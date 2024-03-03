@@ -2,14 +2,7 @@
 
 import { rupiah } from "../libs/Funct-libs";
 
-const Cart = ({ report, setReport, discArr }) => {
-  const handleDelete = (kode) => {
-    let arr = [...report];
-    const filtered = arr.filter((item) => item.kodeBarang !== kode);
-    console.log(filtered);
-    setReport(arr.filter((item) => item.kodeBarang !== kode));
-  };
-
+const Cart = ({ report, discArr, handleDelete }) => {
   return (
     <div className="">
       <div className="overflow-x-auto">
